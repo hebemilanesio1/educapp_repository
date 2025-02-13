@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+            color: #333;
+        }
+
+        .header img {
+            width: 200px; /* Ajusta el ancho según tus necesidades */
+            height: auto; /* Mantiene la proporción de la imagen */
+        }
+
+        .container {
+            width: 100%;
+            padding: 20px;
+        }
+        .header {
+            display: flex;
+            justify-content: center; /* Centra la imagen */
+            align-items: center; /* Centra verticalmente la imagen */
+            margin-bottom: 20px;
+        }
+        .header img {
+            width: 200px; /* Ajusta el ancho según tus necesidades */
+            height: auto; /* Mantiene la proporción de la imagen */
+            display: block;
+            margin: auto; 
+        }
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            margin: 10px 0;
+        }
+        h2 {
+            text-align: center;
+            font-size: 18px;
+            margin: 5px 0;
+            color: #666;
+        }
+        .section-title {
+            background-color: blueviolet;
+            color: white;
+            padding: 8px;
+            font-size: 16px;
+            margin-bottom: 10px;
+            text-align: center;
+            border-radius: 4px;
+        }
+        .info-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        .info-box p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        .info-box strong {
+            color: blueviolet;
+        }
+        .signature {
+            margin-top: 30px;
+            text-align: center;
+        }
+        .signature p {
+            margin: 0;
+            font-size: 13px;
+        }
+        .signature .name {
+            margin-top: 50px;
+            font-weight: bold;
+        }
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+            line-height: 1; /* Reduce el espacio entre líneas */
+            padding: 10px 0;
+            background-color: #f1f1f1;
+            margin-top: 80px; /* Fondo para que sea más visible */
+        }
+        .footer p {
+            margin: 4px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header">
+            <img src="C:/Users/Usuario/seminariointegrador/static/imagenes/logoeducapp.png" alt="Membrete">
+        </div>
+        
+        <!-- Title Section -->
+        <h1>INSCRIPCIÓN A CURSO</h1>
+        <h2>RE1-PE01-02-09</h2>
+
+        <!-- Personal Information -->
+        <div class="section-title">Datos Personales</div>
+        <div class="info-box">
+            <p><strong>Nombre:</strong> {{ alumno.nombre }} {{ alumno.apellido }}</p>
+            <p><strong>Curso:</strong> {{ curso }}</p>
+            <p><strong>Tipo de Documento:</strong> {{ alumno.tipo_documento }}</p>
+            <p><strong>Número de Documento:</strong> {{ alumno.numero_documento }}</p>
+            <p><strong>Dirección:</strong> {{ alumno.direccion }}</p>
+            <p><strong>Localidad:</strong> {{ alumno.localidad }}</p>
+            <p><strong>Teléfono Fijo:</strong> {{ alumno.telefono_fijo }}</p>
+            <p><strong>Teléfono Celular:</strong> {{ alumno.telefono_celular }}</p>
+            <p><strong>E-mail:</strong> {{ alumno.email }}</p>
+        </div>
+        <div class="signature">
+            <p class="name">___________________________</p>
+            <p>Firma del Alumno</p>
+        </div>
+        <div class="footer">
+            <p>EducApp</p>
+            <p>Tel: 1234456 - E-Mail: educapp@gmail.com.ar</p>
+        </div>
+    </div>
+</body>
+</html>

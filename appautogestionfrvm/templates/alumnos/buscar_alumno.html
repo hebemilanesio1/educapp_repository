@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load static %}
+{% block titulo %}Panel de Alumnos{% endblock %}
+
+{% block contenido %}
+<div class="container main-container">
+    <div class="white-square">
+        <h1 class="title">Buscar Alumno</h1>
+        <form method="post" action="{% url 'buscar_alumno' %}">
+            {% csrf_token %}
+            <p>Ingrese el número de DNI del alumno:</p>
+            <div class="mb-3 d-flex align-items-center">
+                <label for="dniAlumno" class="form-label me-2"></label>
+                <input type="text" class="form-control me-2" id="dniAlumno" name="dniAlumno" placeholder="DNI" required>
+                <button type="submit" class="btn" style="width: 50px; height: 50px; background-color: blueviolet; border-radius: 50%; border: none;">
+                    <img src="{% static 'imagenes/buscar-alumno.png' %}" alt="Buscar" style="width: 30px; height: 30px;">
+                </button>                
+                
+            </div>
+            <a href="{% url 'main' %}" class="btn btn-secondary me-4">
+                Volver
+            </a>
+        </form>
+    </div>
+</div>
+
+<style>
+    .main-container {
+        text-align: center;
+        margin-top: 50px;
+    }
+    .white-square {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        padding: 40px;
+        margin-top: 30px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .title {
+        margin-bottom: 20px;
+    }
+    .form-control {
+        border-radius: 10px;
+        padding: 10px;  /* Reducido el padding para que los campos sean más pequeños */
+        font-size: 16px;  /* Ajustado el tamaño de fuente */
+        width: 250px;  /* Ajustado el ancho para que sean más pequeños */
+    }
+    .btn-primary {
+        border-radius: 10px;
+        padding: 10px 20px;
+        font-size: 16px;
+    }
+</style>
+
+{% endblock %}

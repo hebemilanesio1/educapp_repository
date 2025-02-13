@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% load static%}
+{% block titulo %}Lista de Cursos{% endblock %}
+
+{% block contenido %}
+
+<style>
+    .table thead th {
+        background-color: blueviolet; /* Color naranja para el encabezado */
+        color: black; /* Color del texto en el encabezado */
+    }
+
+    .btn-warning {
+        background-color: blueviolet; /* Color naranja para el botón */
+        color: white; /* Color del texto en el botón */
+        font-size: 1.25rem; /* Tamaño de fuente del botón */
+    }
+
+    .btn-icon {
+        border: 2px solid #ddd; /* Borde alrededor del botón */
+        border-radius: 5px; /* Bordes redondeados */
+        padding: 8px; /* Espacio alrededor de la imagen */
+        background-color: white; /* Color de fondo del botón */
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px; /* Ancho del botón */
+        height: 40px; /* Alto del botón */
+        cursor: pointer;
+        text-decoration: none; /* Eliminar subrayado del enlace */
+    }
+
+    .btn-icon img {
+        width: 35px; /* Tamaño de la imagen dentro del botón */
+        height: 35px; /* Tamaño de la imagen dentro del botón */
+    }
+
+    .table {
+        border: 1px solid #ddd; /* Borde alrededor de la tabla */
+    }
+
+    .table td, .table th {
+        border: 1px solid #ddd; /* Borde alrededor de las celdas */
+    }
+</style>
+
+<div class="mb-3 d-flex align-items-center mt-4"> <!-- Añadir mt-4 para margen superior -->
+    <!-- Botón Volver -->
+    <a href="{% url 'main' %}" class="btn btn-secondary me-4">
+        Volver
+    </a>
+    
+    <!-- Formulario de Búsqueda -->
+    <form method="get" action="{% url 'cursos' %}" class="d-flex flex-grow-1">
+        <input type="text" name="q" class="form-control me-2" placeholder="Buscar cursos" value="{{ request.GET.q }}" style="flex: 1;">
+        <button type="submit" class="btn btn-warning">Buscar</button> <!-- Cambiado a btn-warning -->
+    </form>
+    
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <a href="{% url 'crear' %}" class="btn btn-warning">Agregar nuevo curso</a>
+    </div>
+    <div class="card-body">
+        <h4 class="card-title">Cursos</h4>
+        
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Nombre del Curso</th>
+                        <th scope="col">Tipo de Curso</th>
+                        <th scope="col">Fecha de Inicio</th>
+                        <th scope="col">Período</th>
+                        <th scope="col">Nombre del Docente</th>
+                        <th scope="col">Precio Cuota</th>
+                        <th scope="col">Precio Total</th>
+                        <th scope="col">Día y hora de Cursado</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for curso in cursos %}
+                    <tr>
+                        <td>{{ curso.id }}</td>
+                        <td>{{ curso.nombre }}</td>
+                        <td>{{ curso.tipo }}</td>
+                        <td>{{ curso.fecha_inicio }}</td>
+                        <td>{{ curso.periodo }}</td>
+                        <td>{{ curso.nombre_docente }}</td>
+                        <td>{{ curso.precio_cuota }}</td>
+                        <td>{{ curso.precio_total }}</td>
+                        <td>{{ curso.dia_hora_cursado }}</td>
+                        <td>
+                            <a href="{% url 'editar' curso.id %}" class="btn-icon">
+                                <img src="{% static 'imagenes/editar-boton.png' %}" alt="Editar">
+                            </a> 
+                            <a href="{% url 'eliminar' curso.id %}" class="btn-icon">
+                                <img src="{% static 'imagenes/eliminar-boton.png' %}" alt="Eliminar">
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="11">No se encontraron cursos.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+

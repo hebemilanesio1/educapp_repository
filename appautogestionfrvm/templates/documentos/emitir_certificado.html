@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% load static %}
+{% block titulo %}Panel de Documentos{% endblock %}
+{% block contenido %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emitir Certificados</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<style>
+.button-volver{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+.custom-volver {
+    background-color: gray;
+    color: #fff;
+    border-color: gray;
+}
+.custom-volver:hover {
+    background-color: lightgrey;
+    border-color: lightgrey;
+}
+</style>
+<body>
+    <div class="button-volver">
+        <button type="button" class="btn btn-danger custom-volver" onclick="window.location.href='/documentos'">Volver</button>
+    </div>
+
+    <div class="container mt-5">
+        
+        <div class="container mt-3 p-4 border rounded shadow bg-white">
+            <h2>Emitir Certificados</h2>
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group mb-3">
+                    <label for="curso">Selecciona un curso:</label>
+                    <select name="curso" class="form-control" required>
+                        <option value="">Seleccione un curso</option>
+                        {% for curso in cursos %}
+                            <option value="{{ curso.id }}">{{ curso.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="numero_documento">Número de DNI:</label>
+                    <input type="text" name="numero_documento" class="form-control" id="numero_documento" required placeholder="Ingrese el DNI del alumno">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="fecha_resolucion">Fecha de resolucion: aaaa-mm-dd</label>
+                    <input type="text" name="fecha_resolucion" class="form-control" id="fecha_resolucion" required placeholder="Ingrese la fecha de resolucion">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="numero_resolucion">Número de resolucion:</label>
+                    <input type="text" name="numero_resolucion" class="form-control" id="numero_resolucion" required placeholder="Ingrese el número de resolucion">
+                </div>
+                <button type="submit" class="btn" style="background-color: blueviolet; color: white;">Generar Certificado</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+{% endblock %}

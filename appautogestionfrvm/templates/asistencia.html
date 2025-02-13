@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load static %}
+{% block titulo %}Panel de Alumnos{% endblock %}
+{% block contenido %}
+<form method="post" action="{% url 'guardar_asistencia' %}">
+    {% csrf_token %}
+    <input type="hidden" name="fecha" value="{{ fecha }}">
+    <input type="hidden" name="curso_id" value="{{ curso.id }}">  <!-- Asegúrate de pasar el curso ID -->
+    {% for alumno in alumnos %}
+        <div>
+            <label>{{ alumno.nombre }}</label>
+            <input type="checkbox" name="asistencia_{{ alumno.id }}" value="presente"> Presente
+        </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-success">Guardar Asistencia</button>
+</form>
+{% endblock %}

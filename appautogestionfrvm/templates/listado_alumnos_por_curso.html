@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+{% block titulo %}Editar Alumno{% endblock %}
+{% load static %}
+{% block contenido %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Alumnos por Curso</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        .containerlistado {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .curso {
+            margin-bottom: 30px;
+        }
+        .curso h2 {
+            color: #333;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        table, th, td {
+            border: 1px solid #000;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: blueviolet;
+        }
+        select {
+            appearance: none;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+            font-size: 16px;
+            margin-top: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.3s;
+        }
+        select:hover, select:focus {
+            border-color: blueviolet;
+            outline: none;
+        }
+        label {
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .buttons {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        .buttons button {
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        .buttons img {
+        width: 48px; /* Ajusta este valor para cambiar el tamaño */
+        height: 48px; /* Ajusta este valor para cambiar el tamaño */
+        }
+
+        .button-volver{
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .custom-volver {
+            background-color: gray; /* Cambia este valor por el color que desees */
+            color: #fff; /* Cambia el color del texto si es necesario */
+            border-color: gray; /* Asegúrate de que el borde coincida con el color del fondo */
+        }
+
+        .custom-volver:hover {
+            background-color: lightgrey; /* Cambia el color al pasar el mouse por encima */
+            border-color: lightgrey;
+        }
+    </style>
+</head>
+<body>
+
+<div class="button-volver">
+    <button type="button" class="btn btn-danger custom-volver" onclick="window.location.href='/documentos'">Volver</button>
+</div>
+    
+
+<div class="containerlistado">
+    
+    <h1>Listado de Alumnos por Curso</h1>
+
+    <form method="GET" action="">
+        <label for="curso">Seleccionar Curso:</label>
+        <select name="curso" id="curso" onchange="this.form.submit()">
+            <option value="">--Seleccione un curso--</option>
+            {% for curso in cursos %}
+            <option value="{{ curso.id }}" {% if curso_obj and curso_obj.id == curso.id %}selected{% endif %}>
+                {{ curso.nombre }}
+            </option>
+            {% endfor %}
+        </select>
+    </form>
+
+    {% if curso_obj %}
+    <div class="buttons">
+        <button onclick="imprimirTabla()" title="Imprimir">
+            <img src="{% static 'imagenes/impresora.png' %}" alt="Imprimir">
+        </button>
+        <button onclick="descargarExcel()" title="Descargar como Excel">
+            <img src="{% static 'imagenes/logo-excel.png' %}" alt="Excel">
+        </button>
+    </div>
+    
+    <div class="curso">
+        <h2>{{ curso_obj.nombre }}</h2>
+        <h3>{{ alumnos|length }} Inscriptos</h3>
+        <table id="tabla-alumnos">
+            <thead>
+                <tr>
+                    <th>Apellido</th>
+                    <th>Nombre</th>
+                    <th>Tipo Documento</th>
+                    <th>Número Documento</th>
+                    <th>Dirección</th>
+                    <th>Localidad</th>
+                    <th>Teléfono Fijo</th>
+                    <th>Teléfono Celular</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for alumno in alumnos %}
+                <tr>
+                    <td>{{ alumno.apellido }}</td>
+                    <td>{{ alumno.nombre }}</td>
+                    <td>{{ alumno.tipo_documento }}</td>
+                    <td>{{ alumno.numero_documento }}</td>
+                    <td>{{ alumno.direccion }}</td>
+                    <td>{{ alumno.localidad }}</td>
+                    <td>{{ alumno.telefono_fijo }}</td>
+                    <td>{{ alumno.telefono_celular }}</td>
+                    <td>{{ alumno.email }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="9">No hay alumnos inscritos en este curso.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p>Seleccione un curso para ver el listado de alumnos.</p>
+    {% endif %}
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+<script>
+    function imprimirTabla() {
+        const printContent = document.querySelector('.curso').innerHTML;
+        const originalContent = document.body.innerHTML;
+        document.body.innerHTML = printContent;
+        window.print();
+        document.body.innerHTML = originalContent;
+        location.reload();
+    }
+
+    function descargarExcel() {
+        const table = document.getElementById('tabla-alumnos');
+        const wb = XLSX.utils.table_to_book(table, {sheet: "Alumnos"});
+        XLSX.writeFile(wb, 'listado_alumnos.xlsx');
+    }
+</script>
+
+</body>
+</html>
+
+{% endblock %}

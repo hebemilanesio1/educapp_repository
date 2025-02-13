@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block titulo %}Tomar Asistencia{% endblock %}
+
+{% block contenido %}
+<div class="container">
+    <div class="button-volver">
+        <button type="button" class="btn btn-danger custom-volver" onclick="window.location.href='/main'">Volver</button>
+    </div>
+
+    <div class="white-square">
+        <form method="POST" id="form-select-course">
+            {% csrf_token %}
+            <h2 class="title">Tomar Asistencia</h2>
+
+            <!-- Mensajes de error -->
+            {% if messages %}
+                <div class="alert">
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="curso">Seleccione el curso:</label>
+                    <select name="curso" id="curso" class="form-control" required>
+                        {% for curso in cursos %}
+                            <option value="{{ curso.id }}">{{ curso.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="fecha">Seleccione la fecha:</label>
+                    <input type="date" name="fecha" id="fecha" class="form-control" required>
+                </div>
+            </div>
+            <div class="button-group">
+                <button type="submit" class="btn btn-warning">Tomar Asistencia</button>
+            </div>
+        </form>
+
+        <!-- Botón para redirigir a Consultar Asistencias -->
+        <div class="button-group">
+            <a href="{% url 'consultar_asistencias' %}" class="btn btn-warning">Consultar Asistencias</a>
+        </div>
+
+        {% if alumnos %}
+        <br />
+        <br />
+            <h3>Asistencia del curso: {{ curso.nombre }} - Fecha: {{ fecha }}</h3>
+            <form method="POST" id="form-guardar-asistencia">
+                {% csrf_token %}
+                <input type="hidden" name="curso" value="{{ curso.id }}">
+                <input type="hidden" name="fecha" value="{{ fecha }}">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Nombre y Apellido</th>
+                            <th>Tipo Documento</th>
+                            <th>Número Documento</th>
+                            <th>Email</th>
+                            <th>Presente</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for alumno in alumnos %}
+                            <tr>
+                                <td>{{ alumno.nombre }} {{ alumno.apellido }}</td>
+                                <td>{{ alumno.tipo_documento }}</td>
+                                <td>{{ alumno.numero_documento }}</td>
+                                <td>{{ alumno.email }}</td>
+                                <td>
+                                    <input type="checkbox" name="presente_{{ alumno.id }}">
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="button-group">
+                    <button type="submit" name="guardar_asistencia" class="btn btn-warning">Guardar Asistencia</button>
+                </div>
+            </form>
+            <br>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    body {
+        background-image: url('{% static "imagenes/home.png" %}');
+        background-size: cover;
+        background-position: top;
+        background-repeat: no-repeat;
+        margin: 0;
+        padding: 0;
+    }
+
+    .navbar {
+        padding: 0.5rem; /* Espaciado alrededor de la navbar */
+        background-color: #ffffff; /* Fondo blanco */
+        margin-bottom: 0; /* Elimina el margen inferior para que esté pegado al contenido */
+    }
+
+    .white-square {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        padding: 40px;
+        margin: 20px auto;
+        width: 100%;
+        max-width: 1200px; /* Ajusta el ancho máximo según tus necesidades */
+    }
+
+    .title {
+        margin-bottom: 20px;
+        font-size: 24px;
+        text-align: center;
+    }
+
+    .table {
+        border: 1px solid #ddd; /* Borde alrededor de la tabla */
+        width: 100%;
+        margin-top: 20px;
+        border-collapse: collapse;
+    }
+
+    .table thead th {
+        background-color: blueviolet; /* Color naranja para el encabezado */
+        color: rgb(255, 255, 255); /* Color del texto en el encabezado */
+    }
+
+    .table td, .table th {
+        border: 1px solid #ddd; /* Borde alrededor de las celdas */
+        padding: 10px;
+        text-align: left;
+    }
+
+    .alert {
+        color: red;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .button-group {
+        display: flex;
+        justify-content: center; /* Centra el contenido */
+        margin-top: 20px;
+    }
+
+    .btn {
+        border-radius: 10px;
+        padding: 10px 20px;
+        font-size: 16px;
+        background: none; /* Eliminamos el fondo del botón */
+        border: none; /* Eliminamos el borde del botón */
+    }
+
+    .btn img {
+        max-width: 100%; /* Ajustamos la imagen para que no se desborde */
+    }
+
+    .btn-warning {
+        background-color: blueviolet; /* Color naranja para el botón */
+        color: white; /* Color del texto en el botón */
+        border: none; /* Eliminar borde */
+    }
+
+    .button-volver{
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+    .custom-volver {
+        background-color: gray; /* Cambia este valor por el color que desees */
+        color: #fff; /* Cambia el color del texto si es necesario */
+        border-color: gray; /* Asegúrate de que el borde coincida con el color del fondo */
+    }
+    
+    .custom-volver:hover {
+        background-color: lightgrey; /* Cambia el color al pasar el mouse por encima */
+        border-color: lightgrey;
+    }
+</style>
+
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% load static %}
+{% block titulo %}Panel de Documentos{% endblock %}
+
+{% block contenido %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú Principal</title>
+    <style>
+
+        .containermenu {
+            margin-top: 30px;
+            text-align: center;
+            background-color: white;
+            padding: 50px; /* Aumenta el padding para darle más espacio interno */
+            width: 80%; /* Ajusta el ancho del contenedor */
+            max-width: 1200px; /* Establece un ancho máximo para pantallas grandes */
+            margin: 30px auto; /* Centra el contenedor horizontalmente */
+            border-radius: 15px; /* Agrega bordes redondeados */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Agrega una sombra para darle profundidad */
+        }
+        .button {
+            display: inline-block;
+            background-color: blueviolet;
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 30px 45px;
+            margin: 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .button:hover {
+            background-color: blueviolet;
+            transform: scale(1.05);
+        }
+        .button:active {
+            background-color: blueviolet;
+        }
+        .button-volver{
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .custom-volver {
+            background-color: gray; /* Cambia este valor por el color que desees */
+            color: #fff; /* Cambia el color del texto si es necesario */
+            border-color: gray; /* Asegúrate de que el borde coincida con el color del fondo */
+        }
+
+        .custom-volver:hover {
+            background-color: lightgrey; /* Cambia el color al pasar el mouse por encima */
+            border-color: lightgrey;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="button-volver">
+        <button type="button" class="btn btn-danger custom-volver" onclick="window.location.href='/main'">Volver</button>
+    </div>
+
+    <div class="containermenu">
+
+        <h1>DOCUMENTACIÓN</h1>
+        <a href="/listado-alumnos/" class="button">Listados</a>
+        <a href="/emitir_certificado/" class="button">Certificados</a>
+    </div>
+
+    
+</body>
+</html>
+
+{% endblock %}

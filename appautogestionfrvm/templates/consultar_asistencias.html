@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block titulo %}Consultar Asistencias{% endblock %}
+
+{% block contenido %}
+<div class="container">
+    <div class="button-volver">
+        <button type="button" class="btn btn-danger custom-volver" onclick="window.location.href='/main'">Volver</button>
+    </div>
+
+    <div class="white-square">
+        <h2 class="title">Consultar Asistencias</h2>
+
+        <form method="POST" action="{% url 'consultar_asistencias' %}">
+            {% csrf_token %}
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="curso">Seleccione el curso:</label>
+                    <select id="curso" name="curso_id" class="form-control" required>
+                        {% for curso in cursos %}
+                            <option value="{{ curso.id }}">{{ curso.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="fecha">Seleccione la fecha:</label>
+                    <input type="date" id="fecha" name="fecha" class="form-control" required>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="btn btn-warning">Consultar Asistencia</button>
+            </div>
+        </form>
+
+        <!-- Mensajes de error -->
+        {% if messages %}
+            <div class="alert">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    body {
+        background-image: url('{% static "imagenes/home.png" %}');
+        background-size: cover;
+        background-position: top;
+        background-repeat: no-repeat;
+        margin: 0;
+        padding: 0;
+    }
+
+    .navbar {
+        padding: 0.5rem; /* Espaciado alrededor de la navbar */
+        background-color: #ffffff; /* Fondo blanco */
+        margin-bottom: 0; /* Elimina el margen inferior para que esté pegado al contenido */
+    }
+
+    .white-square {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        padding: 40px;
+        margin: 20px auto;
+        width: 100%;
+        max-width: 1200px; /* Ajusta el ancho máximo según tus necesidades */
+    }
+
+    .title {
+        margin-bottom: 20px;
+        font-size: 24px;
+        text-align: center;
+    }
+
+    .button-group {
+        display: flex;
+        justify-content: center; /* Centra el contenido */
+        margin-top: 20px;
+    }
+
+    .btn {
+        border-radius: 10px;
+        padding: 10px 20px;
+        font-size: 16px;
+        background: none; /* Eliminamos el fondo del botón */
+        border: none; /* Eliminamos el borde del botón */
+    }
+
+    .btn-warning {
+        background-color: blueviolet; /* Color naranja para el botón */
+        color: white; /* Color del texto en el botón */
+        border: none; /* Eliminar borde */
+    }
+
+    .alert {
+        color: red;
+        font-weight: bold;
+        margin-top: 20px;
+    }
+
+    
+    .button-volver{
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+    .custom-volver {
+        background-color: gray; /* Cambia este valor por el color que desees */
+        color: #fff; /* Cambia el color del texto si es necesario */
+        border-color: gray; /* Asegúrate de que el borde coincida con el color del fondo */
+    }
+    
+    .custom-volver:hover {
+        background-color: lightgrey; /* Cambia el color al pasar el mouse por encima */
+        border-color: lightgrey;
+    }
+    
+</style>
+
+{% endblock %}

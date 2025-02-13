@@ -1,0 +1,252 @@
+{% extends "base.html" %}
+{% block titulo %}Crear Alumno{% endblock %}
+
+{% block contenido %}
+
+<div class="container main-container">
+    <div class="white-square">
+        <h1 class="title">INSCRIPCIÓN A CURSO</h1>
+        <form method="post" action="{% url 'gestion_alumno' numero_documento %}">
+            {% csrf_token %}
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="curso">Curso:</label>
+                    {{ form.curso }}
+                </div>
+                <div>
+                <div class="form-group">
+                    <label for="concepto">Concepto:</label>
+                    <select id="id_concepto" name="concepto" class="form-control">
+                        <option value="">Selecciona un concepto</option>
+                        {% for concepto in conceptos %}
+                            <option value="{{ concepto.id }}" data-monto="{{ concepto.monto }}">
+                                {{ concepto.descripcion }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Monto:</label>
+                    <span id="monto_concepto"></span>
+                </div>
+            </div>
+            </div>
+
+            <!-- Datos del Alumno -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="apellido">Apellido:</label>
+                    {{ form.apellido }}
+                </div>
+                <div class="form-group">
+                    <label for="nombre">Nombre:</label>
+                    {{ form.nombre }}
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="tipo_documento">Tipo de Documento:</label>
+                    {{ form.tipo_documento }}
+                </div>
+                <div class="form-group">
+                    <label for="numero_documento">Número de Documento:</label>
+                    {{ form.numero_documento }}
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="direccion">Dirección:</label>
+                    {{ form.direccion }}
+                </div>
+                <div class="form-group">
+                    <label for="localidad">Localidad:</label>
+                    {{ form.localidad }}
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="telefono_fijo">Teléfono Fijo:</label>
+                    {{ form.telefono_fijo }}
+                </div>
+                <div class="form-group">
+                    <label for="telefono_celular">Teléfono Celular:</label>
+                    {{ form.telefono_celular }}
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="email">E-mail:</label>
+                {{ form.email }}
+            </div>
+
+            <!-- Botones -->
+            <div class="button-group">
+                <button type="button" class="btn btn-danger" onclick="window.history.back()">Volver</button>
+                <button type="submit" class="btn btn-success">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
+</div>
+
+<script>
+document.getElementById('id_curso').addEventListener('change', function () {
+    var cursoId = this.value;
+
+    // Realiza la solicitud AJAX solo si se seleccionó un curso
+    if (cursoId) {
+        fetch(`/obtener-conceptos/${cursoId}/`, {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest' // Asegúrate de que este encabezado se envíe
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error en la respuesta');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Actualiza el selector de conceptos
+            var conceptoSelect = document.getElementById('id_concepto');
+            conceptoSelect.innerHTML = '<option value="">Selecciona un concepto</option>'; // Reinicia el select
+
+            data.forEach(concepto => {
+                var option = document.createElement('option');
+                option.value = concepto.id;
+                option.textContent = concepto.descripcion;
+                option.dataset.monto = concepto.monto; // Almacena el monto en un atributo data
+                conceptoSelect.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error('Error en la solicitud:', error);
+        });
+    } else {
+        // Si no hay curso seleccionado, reinicia el select de conceptos
+        document.getElementById('id_concepto').innerHTML = '<option value="">Selecciona un concepto</option>';
+        document.getElementById('monto_concepto').textContent = ''; // Reinicia el monto
+    }
+});
+
+// Agregar un evento para mostrar el monto al seleccionar un concepto
+document.getElementById('id_concepto').addEventListener('change', function () {
+    var selectedOption = this.options[this.selectedIndex];
+    var monto = selectedOption.dataset.monto || 0; // Obtiene el monto del atributo data
+    document.getElementById('monto_concepto').textContent = `$${monto}`; // Actualiza el monto mostrado
+});
+
+// Funcionalidad para generar el link de pago
+// Funcionalidad para generar el link de pago
+document.getElementById('generar_pago').addEventListener('click', function () {
+    var monto = document.getElementById('monto_concepto').textContent.replace('$', '').trim(); // Obtener el monto
+    var conceptoId = document.getElementById('id_concepto').value;
+    var cursoId = document.getElementById('id_curso').value;
+    var email = document.querySelector('input[name="email"]').value;  // Obtener el email del formulario
+
+    if (monto && conceptoId && cursoId) {
+        // Realiza una solicitud AJAX para crear el link de pago
+        fetch('/checkout/', {  // Asegúrate de que esta URL apunte a tu vista checkout
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'  // Cambia el tipo de contenido a JSON
+            },
+            body: JSON.stringify({
+                amount: parseFloat(monto), // Asegúrate de enviar el monto como número
+                concepto_id: conceptoId,
+                curso_id: cursoId,
+                email: email  // Enviar el email
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.preference_id) {
+                // Abre el link de pago en una nueva ventana
+                window.open(`https://www.mercadopago.com.ar/checkout/v1/redirect?pref_id=${data.preference_id}`, '_blank');
+
+                // Redirige a la URL de confirmación después de abrir la ventana de pago
+                window.location.href = `/confirmar_pago/?payment_id=${data.preference_id}&status=${data.status}&concepto_id=${conceptoId}&curso_id=${cursoId}&email=${email}`;
+            } else {
+                alert('Error al generar el link de pago');
+            }
+        })
+        .catch(error => {
+            console.error('Error al generar el link de pago:', error);
+            alert('Error al generar el link de pago');
+        });
+    } else {
+        alert('Por favor selecciona un curso, concepto y monto.');
+    }
+});
+
+
+</script>
+
+
+
+
+
+<style>
+    .main-container {
+        text-align: center;
+        margin-top: 5px;
+    }
+    .white-square {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        padding: 40px;
+        margin-top: 30px;
+        display: inline-block;
+        text-align: left;
+        width: 600px; /* Ancho ajustado para acomodar dos columnas */
+    }
+    .title {
+        margin-bottom: 20px;
+        font-size: 24px;
+        text-align: center;
+    }
+    .form-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+    }
+    .form-group {
+        width: 48%;
+    }
+    label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+    .form-control {
+        border-radius: 10px;
+        padding: 5px;
+        font-size: 16px;
+        width: 100%;
+    }
+    .button-group {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+    .btn {
+        border-radius: 10px;
+        padding: 10px 20px;
+        font-size: 16px;
+        width: 48%;
+    }
+    .btn-danger {
+        background-color: red;
+        color: white;
+        border: none;
+    }
+    .btn-success {
+        background-color: green;
+        color: white;
+        border: none;
+    }
+</style>
+{% endblock %}

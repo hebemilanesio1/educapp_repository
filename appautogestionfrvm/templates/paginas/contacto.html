@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load static %}
+{% block titulo %}Contacto{% endblock %}
+{% block contenido %}
+<br />
+<style>
+    .contact-container {
+        display: flex;
+        flex-direction: column;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .info-container {
+        margin: 20px 0;
+    }
+    .info-container p {
+        margin: 10px 0;
+        line-height: 1.6;
+    }
+    .social-links {
+        display: flex;
+        align-items: center;
+        margin-top: 20px;
+    }
+    .social-links a {
+        margin-right: 15px;
+        text-decoration: none;
+    }
+    .social-links img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        transition: transform 0.3s;
+    }
+    .social-links img:hover {
+        transform: scale(1.1);
+    }
+    .map-container {
+        margin-top: 20px;
+    }
+    iframe {
+        width: 100%;
+        height: 300px;
+        border: 0;
+    }
+</style>
+
+<div class="contact-container">
+    <div class="info-container">
+        <h2>Datos de contacto</h2>
+        <p>Diríjase personalmente a nuestra oficina en:</p>
+        <p><strong>Dir. 123 - Villa María (Córdoba)</strong></p>
+        <p>ó comuníquese telefónicamente al:</p>
+        <p><strong>0353 - 1234456 int 123</strong></p>
+        <p>de Lunes a Viernes de 08:00 a 12:00 - 15:00 a 21:00 hs.</p>
+        <p>También puede escribirnos a:</p>
+        <p><strong>educapp@gmail.com.ar</strong></p>
+        <div class="social-links">
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+                <img src="{% static 'imagenes/instagram-logo.png' %}" alt="Instagram">
+            </a>
+            <a href="https://web.whatsapp.com/" target="_blank" rel="noopener noreferrer">
+                <img src="{% static 'imagenes/whatsapp-logo.png' %}" alt="WhatsApp">
+            </a>
+        </div>
+        <div class="map-container">
+            <h3>Ubicación en Villa María</h3>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3332.476049825071!2d-63.25659242500922!3d-32.40753120515533!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95cb288e001ff4d3%3A0x8bdb08f4ed77f65e!2sAv.%20Universidad%20450%2C%20X5900%20Villa%20Mar%C3%ADa%2C%20C%C3%B3rdoba%2C%20Argentina!5e0!3m2!1sen!2sve!4v1692665814239!5m2!1sen!2sve" 
+                loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

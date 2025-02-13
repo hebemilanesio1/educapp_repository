@@ -1,0 +1,287 @@
+{% extends "base.html" %}
+{% load static %}
+{% block titulo %}Inicio{% endblock %}
+
+{% block contenido %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Cursos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .containerdv {
+            margin-top: 50px;
+        }
+
+        .course {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 20px;
+            display: flex;
+        }
+        .course img {
+            max-width: 200px;
+            height: auto;
+            display: block;
+        }
+        .course-content {
+            padding: 20px;
+        }
+        .course-content h2 {
+            margin-top: 0;
+        }
+        .course-content a {
+            text-decoration: none;
+            color: blueviolet;
+            font-weight: bold;
+        }
+        .course-content a:hover {
+            text-decoration: underline;
+        }
+
+        .chat-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: blueviolet;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transition: background-color 0.3s;
+        }
+
+        .chat-btn:hover {
+            background-color: blueviolet;
+        }
+
+        .chat-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            border-radius: 8px;
+            padding: 10px;
+            max-width: 300px;
+        }
+
+        .chat-input-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 30px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .chat-input-container input[type="text"] {
+            border: none;
+            width: 100%;
+            padding: 10px;
+            border-radius: 30px;
+            outline: none;
+            background-color: transparent;
+        }
+
+        .chat-input-container button {
+            background-color: blueviolet;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .chat-input-container button:hover {
+            background-color: blueviolet;
+        }
+
+        .chat-messages {
+            width: 100%;
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #fff;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .chat-message {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: #e6e6e6;
+        }
+
+        .chat-message.user {
+            background-color: #cce5ff;
+            text-align: right;
+        }
+
+        .chat-message.bot {
+            background-color: #e6e6e6;
+            text-align: left;
+        }
+
+        .faq-container {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .faq-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .faq-list li {
+            margin-bottom: 10px;
+        }
+
+        .faq-list button {
+            background-color: transparent;
+            border: none;
+            color: blueviolet;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: left;
+            width: 100%;
+        }
+
+        .faq-list button:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="containerdv">
+        <div class="course">
+            <img src="{% static 'imagenes/fotografia.png' %}" alt="Curso Fotografía">
+            <div class="course-content">
+                <h1>Curso de Fotografía</h1>
+                <p>Duración: 10 clases. Jueves de 18 a 22 hs.</p>
+            </div>
+        </div>
+
+        <div class="course">
+            <img src="{% static 'imagenes/marketing.png' %}" alt="Curso Marketing">
+            <div class="course-content">
+                <h1>Curso de Marketing Digital</h1>
+                <p>Duración: 3 meses. Lunes de 18 a 20 hs.</p>
+            </div>
+        </div>
+        <div class="course">
+            <img src="{% static 'imagenes/python.png' %}" alt="Curso Python">
+            <div class="course-content">
+                <h1>Curso de Python</h1>
+                <p>Duración: 3 meses. Miércoles de 19 a 22 hs.</p>
+            </div>
+        </div>
+
+        <div class="course">
+            <img src="{% static 'imagenes/oratoria.png' %}" alt="Curso Oratoria">
+            <div class="course-content">
+                <h1>Curso de Oratoria</h1>
+                <p>Duración: 4 clases. Lunes de 19 a 21 hs.</p>
+            </div>
+        </div>
+
+        <!-- Botón de chat -->
+        <button class="chat-btn" id="chat-btn">
+            <i class="fas fa-comments"></i>
+        </button>
+
+        <!-- Contenedor del chat -->
+        <div class="chat-container" id="chat-container">
+            <div class="chat-messages" id="chat-messages">
+                <div class="faq-container">
+                    <h2>Preguntas Frecuentes</h2>
+                    <ul class="faq-list">
+                        <li><button onclick="selectFAQ('Fotografia')">Fotografía</button></li>
+                        <li><button onclick="selectFAQ('Marketing digital')">Marketing Digital</button></li>
+                        <li><button onclick="selectFAQ('Python')">Python</button></li>
+                        <li><button onclick="selectFAQ('Oratoria')">Oratoria</button></li>
+                        <li><button onclick="window.open('https://wa.me/3533448354', '_blank')">Inscripción a un curso</button></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="chat-input-container">
+                <input type="text" id="chat-input" placeholder="Escribe tu pregunta...">
+                <button id="chat-submit">Enviar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function selectFAQ(question) {
+            document.getElementById('chat-input').value = question;
+            document.getElementById('chat-submit').click();
+        }
+
+        document.getElementById('chat-btn').addEventListener('click', function() {
+            const chatContainer = document.getElementById('chat-container');
+            chatContainer.style.display = chatContainer.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        document.getElementById('chat-submit').addEventListener('click', function() {
+            const userMessage = document.getElementById('chat-input').value;
+            if (userMessage.trim() !== '') {
+                addMessageToChat('user', userMessage);
+
+                // Realizar la solicitud AJAX
+                fetch(`/chatbot/?message=${encodeURIComponent(userMessage)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        addMessageToChat('bot', data.response);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        addMessageToChat('bot', 'Hubo un error al obtener la respuesta.');
+                    });
+
+                document.getElementById('chat-input').value = ''; // Limpiar el input
+            }
+        });
+
+        function addMessageToChat(sender, message) {
+            const chatMessages = document.getElementById('chat-messages');
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('chat-message', sender);
+            messageElement.textContent = message;
+            chatMessages.appendChild(messageElement);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+    </script>
+</body>
+</html>
+{% endblock %}
+

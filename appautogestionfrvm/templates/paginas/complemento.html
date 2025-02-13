@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% load static %}
+{% block titulo %}Inicio{% endblock %}
+{% block contenido %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instituciones con Convenio</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        input[type="text"] {
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 25px;  /* Borde redondeado */
+            width: calc(100% - 22px);
+            outline: none;  /* Elimina el borde azul al hacer clic */
+            transition: border-color 0.3s ease-in-out;
+        }
+
+        input[type="text"]:focus {
+            border-color: blueviolet;  /* Color del borde al enfocarse */
+        }
+
+        .containerb {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .content {
+            margin-bottom: 20px;
+        }
+        .content h1 {
+            margin-top: 0;
+        }
+        .images {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .images img {
+            width: 150px;
+            height: auto; 
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class='containerb'>
+        <div class="search-container">
+            <h1>Instituciones que certifican con nosotros</h1>
+            <input type="text" id="institutionName" placeholder="Ingresa el nombre de la institución" oninput="searchInstitution()">
+            <div class="result" id="result"></div>
+        </div>
+    </div>
+</body>
+<script>
+
+    // Lista de instituciones
+    const institutions = [
+        "A-EVANGELISTA S.A.",
+        "A.L.M. METALMECÁNICA",
+        "A.V.V.A. - DELEGACIÓN REGIONAL VILLA MARÍA",
+        "ACABIO",
+        "ACADEMIA LOCAL CISCO",
+        "ACEITERA GENERAL ORDOÑEZ",
+        "ACMY INGENIERÍA SAS",
+        "ADK S.R.L.",
+        "ADK SRL",
+        "AERIS INGENIERÍA SA",
+        "AEROPUERTO NESTOR CARLOS KIRCHNER",
+        "AESA",
+        "AGRO ACOPIO",
+        "AGRO-INDUSTRIA",
+        "AGROMEC S.A",
+        "AGROMETAL S.A.I",
+        "AGROPARTES S.A",
+        "AGRÍCOLA MAGDALENA SRL",
+        "AL PRO S.A",
+        "ALDO F.BENITO E HIJOS S.A",
+        "ALEJANDRO AGUSTÍN ROGER"
+    ];
+
+    function searchInstitution() {
+        const input = document.getElementById('institutionName').value.toLowerCase();
+        const resultDiv = document.getElementById('result');
+
+        // Si no hay texto en el campo de búsqueda, mostrar todas las instituciones
+        if (input === '') {
+            resultDiv.innerHTML = institutions.map(inst => `<p>${inst}</p>`).join('');
+            return;
+        }
+
+        // Filtrar instituciones que contienen el texto ingresado
+        const matches = institutions.filter(inst => inst.toLowerCase().includes(input));
+
+        if (matches.length > 0) {
+            resultDiv.innerHTML = matches.map(inst => `<p>${inst}</p>`).join('');
+        } else {
+            resultDiv.innerHTML = '<p class="error">No se encontraron instituciones relacionadas.</p>';
+        }
+    }
+
+
+</script>
+</html>
+{% endblock %}
+
+

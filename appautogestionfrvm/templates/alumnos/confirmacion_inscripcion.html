@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% load static %}
+{% block titulo %}Panel de Alumnos{% endblock %}
+
+{% block contenido %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirmación de Inscripción</title>
+    <style>
+        /* Estilo del contenedor */
+        .containerinscripcion {
+            background-color: white;
+            padding: 20px;
+            margin: 50px auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .btnvolver {
+            background-color: gray;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            margin-bottom: 100px;
+            margin-top: 20px;
+        }
+
+        /* Estilo del botón */
+        .btn {
+            background-color: blueviolet;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        /* Efecto hover para el botón */
+        .btn:hover {
+            background-color: darkorange;
+        }
+
+        .btnvolver:hover {
+            background-color: darkgray;
+        }
+
+        /* Estilo del texto */
+        h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+
+        .btnvolver-container {
+            margin-top: 20px; /* Ajusta este valor para bajar el botón */
+        }
+    </style>
+</head>
+<body style="background-color: #f4f4f4;">
+    <div class="btnvolver-container">
+        <a href="{% url 'main' %}" class="btnvolver">Volver</a>
+    </div>
+    <div class="containerinscripcion">
+        <h1>Inscripción Registrada Correctamente</h1>
+        <p>El alumno con número de documento {{ numero_documento }} se ha registrado correctamente.</p>
+        
+        <p>Monto: <span id="monto_concepto">${{ monto_concepto }}</span></p>
+        <input type="hidden" id="id_concepto" value="{{ concepto_id }}">
+        <input type="hidden" id="id_curso" value="{{ curso_id }}">
+        
+        <a href="{% url 'generar_pdf' numero_documento=numero_documento %}" class="btn">Generar PDF</a>
+
+        <button type="button" class="btn btn-primary" id="generar_pago">Generar Pago</button>
+    </div>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById('generar_pago').addEventListener('click', function () {
+        // Obtener el monto, concepto y curso desde el HTML
+        var monto = document.getElementById('monto_concepto').textContent.replace('$', '').trim(); // Obtener el monto
+        var conceptoId = document.getElementById('id_concepto').value; // Obtener el concepto ID
+        var cursoId = document.getElementById('id_curso').value; // Obtener el curso ID
+        var email = document.querySelector('input[name="email"]') ? document.querySelector('input[name="email"]').value : null; // Obtener el email del formulario
+
+        if (monto && conceptoId && cursoId) {
+            // Realiza una solicitud AJAX para crear el link de pago
+            fetch('/checkout/', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/json'  // Cambia el tipo de contenido a JSON
+                },
+                body: JSON.stringify({
+                    amount: parseFloat(monto), // Asegúrate de enviar el monto como número
+                    concepto_id: conceptoId,
+                    curso_id: cursoId,
+                    email: email  // Enviar el email
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.preference_id) {
+                    // Abre el link de pago en una nueva ventana
+                    window.open(`https://www.mercadopago.com.ar/checkout/v1/redirect?pref_id=${data.preference_id}`, '_blank');
+                } else {
+                    alert('Error al generar el link de pago');
+                }
+            })
+            .catch(error => {
+                console.error('Error al generar el link de pago:', error);
+                alert('Error al generar el link de pago');
+            });
+        } else {
+            alert('Por favor selecciona un curso, concepto y monto.');
+        }
+    });
+});
+
+    </script>
+</body>
+</html>
+
+{% endblock %}

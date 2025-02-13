@@ -1,0 +1,224 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block titulo %}Panel de Alumnos{% endblock %}
+{% block contenido %}
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+    }
+    .containerdv {
+        max-width: 1500px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    .search-container {
+        display: flex;
+        margin-bottom: 20px;
+    }
+    input[type="text"] {
+        flex: 2;
+        min-width: 300px;
+        padding: 10px;
+        border-radius: 20px;
+        border: 1px solid blueviolet;
+        margin-right: 10px;
+    }
+    button {
+        background-color: blueviolet;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 15px;
+        cursor: pointer;
+    }
+    button:disabled {
+        background-color: #ccc;
+    }
+    table {
+        width: 100%;
+        margin: 40px auto;
+        border-collapse: collapse;
+        border: 2px solid blueviolet; 
+        background-color: #fff;
+    }
+    th, td {
+        padding: 10px;
+        text-align: left;
+    }
+    th {
+        background-color: blueviolet;
+        color: white;
+    }
+    .btn-volver {
+        background-color: gray;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 15px;
+        cursor: pointer;
+        margin-top: 20px;
+    }
+</style>
+
+<a href="{% url 'administrar_alumno' %}">
+    <button class="btn-volver">Volver</button>
+</a>
+<div class="containerdv">
+    <h2>Generar Cuotas para Alumnos</h2>
+    <form method="GET" action="{% url 'generar_cuota' %}">
+        <input type="text" name="query" placeholder="Buscar por DNI, Nombre o Apellido" required>
+        <button type="submit">Buscar</button>
+    </form>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>APELLIDO</th>
+                <th>NOMBRE</th>
+                <th>DNI</th>
+                <th>EMAIL</th>
+                <th>CURSO</th>
+                <th>CUOTA A CREAR</th>
+                <th>CUOTAS REALIZADAS</th>
+                <th>ACCIONES</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for alumno, conceptos_disponibles in alumnos_conceptos_disponibles.items %}
+            <tr>
+                <form action="{% url 'generar_cuota_procesar' %}" method="post" class="form-generar-pago">
+                    {% csrf_token %}
+                    <td>{{ alumno.apellido }}</td>
+                    <td>{{ alumno.nombre }}</td>
+                    <td>{{ alumno.numero_documento }}</td>
+                    <td>{{ alumno.email }}</td>
+                    <td>{{ alumno.curso.nombre }}</td>
+                    <td>
+                        <select name="codigo_concepto" class="select-concepto" required>
+                            <option value="">Seleccione un concepto</option>
+                            {% for concepto in conceptos_disponibles %}
+                                <option value="{{ concepto.id }}" data-monto="{{ concepto.monto }}">{{ concepto.descripcion }}</option>
+                            {% empty %}
+                                <option value="" disabled>No hay conceptos disponibles</option>
+                            {% endfor %}
+                        </select>
+                        <input type="hidden" name="numero_documento" value="{{ alumno.numero_documento }}">
+                        <input type="hidden" name="curso_id" value="{{ alumno.curso.id }}">
+                        <input type="hidden" name="email" value="{{ alumno.email }}">
+                    </td>
+                    <td>
+                        {% for concepto in alumno.pago_set.all %}
+                            <div>{{ concepto.descripcion }} - {{ concepto.fecha_pago|date:"F j, Y" }} - 
+                                {% if concepto.estado_pago %}
+                                    <span style="color: green;">Pagado</span>
+                                {% else %}
+                                    <span style="color: red;">No Pagado</span>
+                                {% endif %}
+                            </div>
+                        {% empty %}
+                            <div>No hay conceptos creados</div>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        <button type="button" class="btn-generar-pago">Generar Pago</button>
+                    </td>
+                </form>
+            </tr>
+            {% endfor %}
+        </tbody>
+        
+    </table>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    var container = document.querySelector('.containerdv');
+
+    container.addEventListener('click', function(event) {
+        if (event.target && event.target.classList.contains('btn-generar-pago')) {
+            // Obtener la fila (tr) en la que se hizo clic en el botón
+            var row = event.target.closest('tr');
+            if (!row) {
+                console.log("Fila no encontrada");
+                return;
+            }
+
+            // Extraer los valores de la fila (las celdas 'td')
+            var apellido = row.cells[0].textContent;
+            var nombre = row.cells[1].textContent;
+            var dni = row.cells[2].textContent;
+            var email = row.cells[3].textContent;
+            var curso = row.cells[4].textContent;
+
+            // Obtener el concepto seleccionado (de la columna 5)
+            var selectConcepto = row.querySelector('.select-concepto');
+            if (!selectConcepto) {
+                alert("Por favor selecciona un concepto.");
+                return;
+            }
+
+            var conceptoId = selectConcepto.value;
+            var monto = selectConcepto.options[selectConcepto.selectedIndex].getAttribute('data-monto');
+
+            // Validar si se ha seleccionado un concepto
+            if (!conceptoId) {
+                alert("Por favor selecciona un concepto.");
+                return;
+            }
+
+            // Validar si los valores necesarios están presentes
+            if (monto && dni && curso && email) {
+                console.log("Datos extraídos de la fila:");
+                console.log("Apellido:", apellido);
+                console.log("Nombre:", nombre);
+                console.log("DNI:", dni);
+                console.log("Email:", email);
+                console.log("Curso:", curso);
+                console.log("Concepto ID:", conceptoId);
+                console.log("Monto:", monto);
+
+                // Realizar la solicitud AJAX a tu backend para procesar el pago
+                fetch('/checkout/', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        amount: parseFloat(monto),
+                        concepto_id: conceptoId,
+                        curso: curso,
+                        numero_documento: dni,
+                        email: email
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.preference_id) {
+                        // Redirigir a la página de pago de Mercado Pago
+                        window.open(`https://www.mercadopago.com.ar/checkout/v1/redirect?pref_id=${data.preference_id}`, '_blank');
+                    } else {
+                        alert('Error al generar el link de pago');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al generar el link de pago:', error);
+                    alert('Error al generar el link de pago');
+                });
+            } else {
+                alert('Por favor selecciona un concepto, curso, monto y proporciona un email.');
+            }
+        }
+    });
+});
+
+
+</script>
+
+{% endblock %}
+

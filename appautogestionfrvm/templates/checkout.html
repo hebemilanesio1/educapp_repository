@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simular Pago</title>
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+</head>
+<body>
+    <h1>Simulación de Pago</h1>
+
+    <!-- Formulario para ingresar el monto -->
+    <form id="paymentForm" method="POST">
+        {% csrf_token %}
+        <label for="amount">Monto a pagar:</label>
+        <input type="number" id="amount" name="amount" min="1" required>
+        <button type="submit">Pagar</button>
+    </form>
+
+    <!-- Script para inicializar el botón de pago -->
+    <script>
+        const mp = new MercadoPago('APP_USR-ba5c8d76-096b-46bf-95fa-15b9dd829f15', {
+            locale: 'es-AR'
+        });
+
+        const paymentForm = document.getElementById('paymentForm');
+        paymentForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            fetch('', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: new URLSearchParams(new FormData(paymentForm))
+            })
+            .then(response => response.json())
+            .then(data => {
+                mp.checkout({
+                    preference: {
+                        id: data.preference_id
+                    }
+                }).open();
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
+
+
+

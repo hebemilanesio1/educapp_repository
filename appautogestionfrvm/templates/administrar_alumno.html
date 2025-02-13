@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load static %}
+{% block titulo %}Panel de Alumnos{% endblock %}
+{% block contenido %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrar Alumno</title>
+    <style>
+        .admin-panel {
+            background-color: white;
+            padding: 30px;
+            border-radius: 30px;
+            text-align: center;
+            box-shadow: 0px 10px 0px rgba(0, 0, 0, 0.1);
+            margin-top: 50px; /* Baja el recuadro */
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-evenly; /* Acerca los botones */
+        }
+
+        .button-container a img {
+            max-width: 400px;
+            margin-bottom: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="admin-panel">
+            <h1>Administrar Alumno</h1>
+            <div class="button-container">
+                <a href="{% url 'buscar_alumno' %}">
+                    <img src="/static/imagenes/inscribir-alumno.png" alt="Inscribir Alumno">
+                </a>
+                <a href="{% url 'generar_cuota' %}">
+                    <img src="/static/imagenes/generar-cuota.png" alt="Generar Cuota">
+                </a>
+            </div
+        </div>
+    </div>
+</body>
+</html>
+
+{% endblock %}

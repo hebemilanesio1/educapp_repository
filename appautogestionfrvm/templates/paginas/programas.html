@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% load static %}
+{% block titulo %}Inicio{% endblock %}
+
+{% block contenido %}
+<style>
+    button {
+        display: block;
+        margin: 20px auto 0 auto;
+        padding: 10px 20px;
+        font-size: 1rem;
+        background-color: blueviolet;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: blueviolet;
+    }
+
+    .rectanglecontainer {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .additional-info {
+        margin-top: 80px;
+    }
+    .search-container {
+        margin-top: 20px;
+    }
+    input[type="text"] {
+        padding: 10px;
+        font-size: 1rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        width: calc(100% - 22px);
+    }
+    .result {
+        margin-top: 20px;
+    }
+    .result p {
+        font-size: 1.2rem;
+        color: blueviolet;
+    }
+    .result p.error {
+        color: red;
+    }
+    .result a {
+        color: blueviolet;
+        text-decoration: none;
+    }
+    .result a:hover {
+        text-decoration: underline;
+    }
+    select {
+        padding: 10px;
+        font-size: 1rem;
+        border: 1px solid #ddd;
+        border-radius: 4px; /* Este valor redondea el borde */
+        width: 100%;
+        background-color: white;
+        color: black;
+        appearance: none; /* Esto es opcional para quitar el estilo predeterminado del seleccionador en algunos navegadores */
+    }
+
+    select:focus {
+        border-color: blueviolet; /* Color del borde cuando está enfocado */
+        outline: none; /* Elimina el borde adicional de enfoque */
+    }
+
+</style>
+<div class="rectanglecontainer">
+    <h1>Descargar el programa del curso</h1>
+    <form id="download-form">
+        <label for="career">Selecciona un curso:</label>
+        <select id="career" name="career">
+            <option value="" selected disabled>Selecciona...</option>
+            <option value="sistemas.doc">Fotografía</option>
+            <option value="quimica.doc">Marketing Digital</option>
+            <option value="electronica.doc">Python Avanzado</option>
+            <option value="mecanica.doc">Fotografía</option>
+        </select>
+        <br/>
+        <button type="button" onclick="downloadPDF('marco')">Descargar Programa</button>
+    </form>
+</div>
+
+<script>
+    function downloadPDF(type) {
+        const selectedPDF = document.getElementById('career').value;
+        if (selectedPDF) {
+            let pdfPath;
+            if (type === 'marco') {
+                pdfPath = `{% static 'pdfs/marco/' %}${selectedPDF}`;
+            } else if (type === 'especifico') {
+                pdfPath = `{% static 'pdfs/especifico/' %}${selectedPDF}`;
+            }
+            window.open(pdfPath, '_blank');
+        } else {
+            alert('Por favor, selecciona un PDF.');
+        }
+    }
+</script>
+{% endblock %}
+
+
+
+

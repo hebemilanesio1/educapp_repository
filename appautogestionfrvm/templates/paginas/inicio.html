@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load static %}
+{% block titulo %}Inicio{% endblock %}
+
+{% block contenido %}
+<br/>
+<br/>
+<style>
+    .imagen {
+        width: 1160px;
+        display: block; /* Asegura que la imagen sea un bloque para el margen automático */
+        margin: 20px auto; /* Espacio arriba y abajo, centrado horizontalmente */
+    }
+    .yellow-rectangle {
+        background-color: rgb(0, 0, 0); /* Color de fondo amarillo */
+        width: 100%; /* Ancho completo del contenedor */
+        height: auto; /* Ajusta automáticamente la altura del rectángulo */
+        padding: 20px; /* Espaciado dentro del rectángulo */
+        box-sizing: border-box; /* Incluye el padding en el cálculo del ancho/alto */
+        display: flex;
+        flex-direction: column; /* Alinea los elementos en columna */
+        align-items: center; /* Centra el contenido horizontalmente */
+        color: white; /* Color del texto blanco */
+    }
+    .yellow-rectangle h1 {
+        margin-bottom: 10px; /* Espacio debajo del título */
+    }
+    .yellow-rectangle p {
+        margin: 0; /* Sin margen adicional en el párrafo */
+        text-align: center; /* Centra el texto del párrafo */
+    }
+    .content-container {
+        text-align: center; /* Centra el contenido dentro del contenedor */
+    }
+</style>
+
+<div class="content-container">
+    
+    <!-- Rectángulo amarillo debajo del texto -->
+    <div class="yellow-rectangle">
+        <p>La misión de nuestra institución es satisfacer las necesidades del medio, ofreciendo ventajas comparativas que posicionen a nuestros alumnos, ofreciendo como herramienta de transformación regional, atendiendo los requerimientos sociales con calidad, eficiencia y eficacia.</p>
+    </div>
+    
+    <hr class="my-2" />
+    <a href="{% url 'login' %}" style="position: absolute; top: 20px; right: 20px;">
+        <button type="button" style="background-color: blueviolet; color: rgb(255, 255, 255); border: none; padding: 0.5rem 1rem; font-size: 1.25rem; border-radius: 1rem;">Acceder</button>
+    </a>    
+    <img src="{% static 'imagenes/encabezado_inicio.png' %}" alt="Descripción de la imagen" class="imagen">
+</div>
+{% endblock %}
+
+
+
+
+
