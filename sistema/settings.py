@@ -140,7 +140,7 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-STATIC_URL = '/staticfiles/imagenes'
+STATIC_URL = '/staticfiles/'
 # Asegurar que Django encuentre los archivos estáticos
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'staticfiles'),
