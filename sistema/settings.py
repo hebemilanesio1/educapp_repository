@@ -140,15 +140,12 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-STATIC_URL = 'educApp/static/'
+STATIC_URL = 'static/'
 
 # Asegurar que Django encuentre los archivos estáticos
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
-
-# Para producción (cuando DEBUG=False)
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Archivos de medios (si los usas)
 MEDIA_URL = '/media/'
