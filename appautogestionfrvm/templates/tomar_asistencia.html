@@ -5,9 +5,7 @@
 
 {% block contenido %}
 <div class="container">
-    <div class="button-volver">
-        <button type="button" class="btn btn-danger custom-volver" onclick="window.location.href='/main'">Volver</button>
-    </div>
+    <a href="{% url 'main' %}" class="btn btn-danger custom-volver">Volver</a>
 
     <div class="white-square">
         <form method="POST" id="form-select-course">
