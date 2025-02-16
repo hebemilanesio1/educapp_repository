@@ -200,7 +200,7 @@ def emitir_certificado(request):
         c.save()
         buffer.seek(0)
 
-        with open('C:/Users/Usuario/seminariointegrador/appautogestionfrvm/certificado_plantilla.pdf', 'rb') as template_file:
+        with open('staticfiles/pdfs/certificado_plantilla.pdf', 'rb') as template_file:
             template_pdf = PyPDF2.PdfReader(template_file)
             output_pdf = PyPDF2.PdfWriter()
 

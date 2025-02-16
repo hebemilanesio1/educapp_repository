@@ -17,23 +17,19 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 LOGIN_REDIRECT_URL = 'admin_dashboard'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("SECRET_KEY")
+SECRET_KEY = 'una_clave_secreta_aleatoria_aqui'
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', "False").lower() == "true"
+DEBUG = True
 
-INTERNAL_IPS = [
-    '127.0.0.1',
-]
-
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(" ")
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'localhost:4200']  # Si tu frontend corre en otro puerto
 
 LOGIN_REDIRECT_URL = 'main'
 SESSION_COOKIE_AGE = 3600
@@ -98,7 +94,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
     }
 }
-database_url = os.environ.get("DATABASE_URL")
+# Obtener la URL de la base de datos desde una variable de entorno
+database_url = os.environ.get("DATABASE_URL", "postgresql://educapp_base_de_datos_user:1800DuHefzoyRa0TQigeTD8HalW9mVzk@dpg-cun16ftumphs73eu9qrg-a.oregon-postgres.render.com/educapp_base_de_datos")
 DATABASES["default"] = dj_database_url.parse(database_url)
 
 
@@ -139,16 +136,14 @@ USE_TZ = True
 import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATIC_URL = '/staticfiles/'
 # Asegurar que Django encuentre los archivos estáticos
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'staticfiles'),
+    os.path.join(BASE_DIR, 'static'),
 ]
 
-# Archivos de medios (si los usas)
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 
