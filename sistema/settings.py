@@ -29,7 +29,12 @@ SECRET_KEY = 'una_clave_secreta_aleatoria_aqui'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'localhost:4200']  # Si tu frontend corre en otro puerto
+ALLOWED_HOSTS = [
+    '127.0.0.1',  # Localhost para desarrollo
+    'localhost',  # Para localhost
+    'educapp-app.onrender.com',  # Dominio de Render
+    # Puedes agregar más dominios aquí si es necesario
+]
 
 LOGIN_REDIRECT_URL = 'main'
 SESSION_COOKIE_AGE = 3600
